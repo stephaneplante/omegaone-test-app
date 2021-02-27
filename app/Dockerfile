@@ -1,21 +1,16 @@
 # Dockerfile
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
-WORKDIR /app
-
-# Copy csproj and restore as distinct layers
-COPY **/*.csproj ./
-RUN dotnet restore
-
-# Copy everything else and build
-COPY . .
-RUN dotnet build -c Release -o out
+WORKDIR /App
+COPY . . 
+RUN dotnet publish -c Release -o publishOutput
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
-WORKDIR /app
-COPY --from=build-env /app/out .
+WORKDIR /App
+COPY --from=build-env /App/publishOutput .
 
 # Run the app on container startup
 # Use projet chame for the second parameter
-ENTRYPOINT [ "dotnet", "omega-test-app.dll" ]
+# ENTRYPOINT [ "dotnet", "omegaone-test-app.dll" ]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet omegaone-test-app.dll
