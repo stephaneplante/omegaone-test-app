@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Google.Cloud.Firestore;
 
 namespace omegaone_test_app
 {
@@ -23,6 +19,7 @@ namespace omegaone_test_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDatabase(services);
             services.AddControllersWithViews();
         }
 
@@ -52,6 +49,17 @@ namespace omegaone_test_app
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void ConfigureDatabase(IServiceCollection services)
+        {
+            const string project = "test-angular-firebase-81253"; // todo: read project-id from environment variables
+            FirestoreDb db = FirestoreDb.Create(project);
+            services.AddTransient<FirestoreDb>((ctx) => 
+            { 
+                return FirestoreDb.Create(project); 
+            });
+            
         }
     }
 }
