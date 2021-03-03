@@ -9,6 +9,7 @@ RUN dotnet publish -c Release -o publishOutput
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /App
 COPY --from=build-env /App/publishOutput .
+RUN apt update && apt install -y libc-dev
 
 # Run the app on container startup
 # Use projet chame for the second parameter

@@ -4,11 +4,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Google.Cloud.Firestore;
+using System;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace omegaone_test_app
 {
     public class Startup
     {
+        private const string GoogleApplicationCredentialsEnv = "GOOGLE_APPLICATION_CREDENTIALS";
+        private const string GACred = "GACred";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -19,7 +25,7 @@ namespace omegaone_test_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureDatabase(services);
+            ConfigureFirestoreDatabase(services);
             services.AddControllersWithViews();
         }
 
@@ -51,15 +57,33 @@ namespace omegaone_test_app
             });
         }
 
-        private void ConfigureDatabase(IServiceCollection services)
+        private void ConfigureFirestoreDatabase(IServiceCollection services)
         {
-            const string project = "test-angular-firebase-81253"; // todo: read project-id from environment variables
-            FirestoreDb db = FirestoreDb.Create(project);
+            CreateGoogleApplicationCredentialsConfiguration();
             services.AddTransient<FirestoreDb>((ctx) => 
             { 
-                return FirestoreDb.Create(project); 
+                return FirestoreDb.Create(GetGoogleApplicationIdFromCredentials()); 
             });
-            
+        }
+
+        private void CreateGoogleApplicationCredentialsConfiguration()
+        {
+            var config = Environment.GetEnvironmentVariable(GACred);
+            var configFilePath = Path.GetTempPath() + Guid.NewGuid().ToString() + ".json"; 
+
+            StreamWriter streamWriter = File.CreateText(configFilePath);
+            streamWriter.WriteLine(config);
+            streamWriter.Flush();
+            streamWriter.Close();
+            Environment.SetEnvironmentVariable(GoogleApplicationCredentialsEnv, configFilePath);
+        }
+
+        private string GetGoogleApplicationIdFromCredentials()
+        {
+            const string projectIdKey = "project_id";
+
+            var o1 = JObject.Parse(File.ReadAllText(Environment.GetEnvironmentVariable(GoogleApplicationCredentialsEnv)));
+            return o1.GetValue(projectIdKey).ToString();
         }
     }
 }
