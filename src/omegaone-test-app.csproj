@@ -4,6 +4,6 @@
     <RootNamespace>omegaone_test_app</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore" Version="2.3.0"/>
+    <PackageReference Include="Google.Cloud.Firestore" Version="2.4.0" />
   </ItemGroup>
 </Project>
