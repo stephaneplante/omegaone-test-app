@@ -1,9 +1,9 @@
 {
     "name": "Omegaone Test app",
     "dockerComposeFile": [
-        "../docker-compose.yml"
+        "../dev/docker-compose.yml"
     ],
-    "service": "test app",
+    "service": "testapp-dev",
     "workspaceFolder": "/app",
     "extensions": [
         "codezombiech.gitignore", 
