@@ -18,5 +18,6 @@
         "ms-dotnettools.csharp", 
         "PKief.material-icon-theme"
     ],
+    "remoteUser": "omegaone",
     "shutdownAction": "stopCompose"
 }
