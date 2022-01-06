@@ -1,0 +1,22 @@
+{
+    "name": "Omegaone Test app",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "test app",
+    "workspaceFolder": "/app",
+    "extensions": [
+        "codezombiech.gitignore", 
+        "eamodio.gitlens", 
+        "Equinusocio.vsc-community-material-theme", 
+        "Equinusocio.vsc-material-theme", 
+        "equinusocio.vsc-material-theme-icons", 
+        "esbenp.prettier-vscode", 
+        "formulahendry.auto-rename-tag", 
+        "formulahendry.code-runner", 
+        "jmrog.vscode-nuget-package-manager", 
+        "ms-dotnettools.csharp", 
+        "PKief.material-icon-theme"
+    ],
+    "shutdownAction": "stopCompose"
+}
